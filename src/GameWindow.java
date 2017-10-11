@@ -8,7 +8,7 @@ public class GameWindow extends JFrame {
     public GameWindow () {
     this.setSize (800, 600);
     this.setVisible(true);
-    this.setBackground(Color.BLACK);
+    this.setBackground(Color.black);
 
     this.canvas = new GameCanvas();
     this.setContentPane(this.canvas);
