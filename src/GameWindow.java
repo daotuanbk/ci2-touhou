@@ -1,3 +1,5 @@
+import touhou.Player;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -5,6 +7,8 @@ import java.awt.event.*;
 public class GameWindow extends JFrame {
 
     GameCanvas canvas;
+
+    Player player;
 
     long lastTimeUpdate;
 
