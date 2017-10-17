@@ -21,6 +21,7 @@ public class Player {
     boolean upPressed;
 
     boolean xPressed;
+    boolean shooted;
 
     final int SPEED = 5;
 
@@ -69,7 +70,7 @@ public class Player {
             downPressed = false;
         }
         if (e.getKeyCode() == VK_X) {
-            xPressed = false;
+            shooted = false;
         }
 
     }
@@ -109,12 +110,17 @@ public class Player {
 
     public void shoot (ArrayList<PlayerSpell> spells) {
         if (xPressed) {
+            shooted = true;
+            xPressed = false;
             PlayerSpell newSpell = new PlayerSpell();
             newSpell.x = x;
             newSpell.y = y;
 
             spells.add(newSpell);
         }
+    }
+    public Rectangle pBounds () {
+        return new Rectangle(x,y,image.getWidth(),image.getHeight());
     }
 
 }

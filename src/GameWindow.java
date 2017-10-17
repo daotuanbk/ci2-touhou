@@ -51,7 +51,6 @@ public class GameWindow extends JFrame {
     public void gameLoop () {
         while (true) {
                 long currentTime = System.nanoTime();
-
                 if (currentTime - lastTimeUpdate >= 17000000) {
                     canvas.run();
                     canvas.repaint();
