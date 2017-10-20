@@ -8,8 +8,6 @@ public class GameWindow extends JFrame {
 
     GameCanvas canvas;
 
-    Player player;
-
     long lastTimeUpdate;
 
     public GameWindow() {
@@ -50,13 +48,14 @@ public class GameWindow extends JFrame {
 
     public void gameLoop () {
         while (true) {
-                long currentTime = System.nanoTime();
-                if (currentTime - lastTimeUpdate >= 17000000) {
-                    canvas.run();
-                    canvas.repaint();
-                    canvas.render();
-                    lastTimeUpdate = currentTime;
-                }
+            long currentTime = System.nanoTime();
+
+            if (currentTime - lastTimeUpdate >= 17000000) {
+                canvas.run();
+                canvas.repaint();
+                canvas.render();
+                lastTimeUpdate = currentTime;
+            }
         }
     }
 }

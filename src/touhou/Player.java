@@ -1,19 +1,13 @@
 package touhou;
 
+import bases.GameObject;
 import bases.Utils;
 
-import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
 import static java.awt.event.KeyEvent.*;
 
-public class Player {
-    BufferedImage image;
-
-    public int x = 182;
-    public int y = 510;
+public class Player extends GameObject {
 
     boolean rightPressed;
     boolean leftPressed;
@@ -22,19 +16,21 @@ public class Player {
 
     boolean xPressed;
     boolean shooted;
+    boolean spellDisabled = false;
+
+    int coolDownCount;
 
     final int SPEED = 5;
-
+    final int coolDownTime = 30;
     final int LEFT = 0;
     final int RIGHT = 360;
     final int TOP = 0;
     final int BOTTOM = 518;
 
-    public Player () {
+    public Player() {
+        x = 182;
+        y = 510;
         image = Utils.loadImage("assets/images/players/straight/0.png");
-    }
-    public void render (Graphics graphics) {
-        graphics.drawImage(image,x,y,null);
     }
 
     public void keyPressed(KeyEvent e) {
@@ -74,7 +70,13 @@ public class Player {
         }
 
     }
+
     public void run() {
+        move();
+        shoot();
+    }
+
+    private void move() {
         int vx = 0;
         int vy = 0;
 
@@ -93,11 +95,11 @@ public class Player {
 
         x += vx;
         y += vy;
-        x = (int)clamp(x, LEFT, RIGHT);
-        y = (int)clamp(y, TOP, BOTTOM);
+        x = (int) clamp(x, LEFT, RIGHT);
+        y = (int) clamp(y, TOP, BOTTOM);
     }
 
-    private float clamp (float value, float min, float max) {
+    private float clamp(float value, float min, float max) {
         if (value < min) {
             return min;
         }
@@ -108,19 +110,22 @@ public class Player {
         return value;
     }
 
-    public void shoot (ArrayList<PlayerSpell> spells) {
+    public void shoot() {
+        if (spellDisabled) {
+            coolDownCount++;
+            if (coolDownCount >= coolDownTime) {
+                spellDisabled = false;
+                coolDownCount = 0;
+            }
+            return;
+        }
         if (xPressed) {
-            shooted = true;
             xPressed = false;
             PlayerSpell newSpell = new PlayerSpell();
             newSpell.x = x;
             newSpell.y = y;
-
-            spells.add(newSpell);
+            GameObject.add(newSpell);
+            spellDisabled = true;
         }
     }
-    public Rectangle pBounds () {
-        return new Rectangle(x,y,image.getWidth(),image.getHeight());
-    }
-
 }
