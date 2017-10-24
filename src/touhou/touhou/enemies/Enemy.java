@@ -1,12 +1,14 @@
-package touhou;
+package touhou.touhou.enemies;
 
 import bases.GameObject;
 import bases.Utils;
+import bases.physics.BoxColider;
 
 
 public class Enemy extends GameObject {
-    boolean checkDie = true;
     boolean spellDisabled;
+
+    public BoxColider boxColider;
 
     int coolDownCount;
     int SPEED = 3;
@@ -16,23 +18,15 @@ public class Enemy extends GameObject {
     final int RIGHT = 352;
 
     public Enemy() {
-        x = 0;
-        y = 0;
+        position.set(20,20);
+        boxColider = new BoxColider(30, 30);
         image = Utils.loadImage("assets/images/enemies/level0/blue/0.png");
     }
 
     public void run() {
-        if (checkDie) {
-            if (x >= RIGHT) {
-                SPEED = -3;
-            } else if (x <= LEFT) {
-                SPEED = 3;
-            }
-            x += SPEED;
-        }
+        position.addUp(0, 2);
         shoot();
-
-
+        boxColider.postition.set(this.position);
     }
 
     public void shoot() {
@@ -45,11 +39,14 @@ public class Enemy extends GameObject {
             return;
         } else {
             EnemySpell newSpell = new EnemySpell();
-            newSpell.x = x;
-            newSpell.y = y;
+            newSpell.position.set(position.x, position.y + image.getWidth()/2);
             GameObject.add(newSpell);
             spellDisabled = true;
         }
+    }
+
+    public void getHit() {
+        isActive = false;
     }
 
  /*   public Rectangle eBounds() {

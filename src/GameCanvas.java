@@ -1,8 +1,8 @@
 import bases.GameObject;
-import touhou.Enemy;
-import touhou.EnemySpell;
-import touhou.PlayerSpell;
-import touhou.Player;
+import touhou.touhou.enemies.Enemy;
+import touhou.touhou.enemies.EnemySpawner;
+import touhou.touhou.players.PlayerSpell;
+import touhou.touhou.players.Player;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -11,7 +11,6 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 
 public class GameCanvas extends JPanel {
@@ -41,7 +40,7 @@ public class GameCanvas extends JPanel {
         }
         GameObject.add(player);
         GameObject.add(enemy);
-
+        GameObject.add(new EnemySpawner());
 
     }
 
@@ -90,14 +89,6 @@ public class GameCanvas extends JPanel {
 //
 //    }
 
-    public void checkDie() {
-        if (enemy.getRetangle().intersects(player.getRetangle())) {
-            System.out.println("die");
-        }
-        if (playerSpell.getRetangle().intersects((enemy.getRetangle()))) {
-            System.out.println("ok");
-        }
-    }
 
     @Override
     //2. Draw background

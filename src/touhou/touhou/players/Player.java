@@ -1,7 +1,9 @@
-package touhou;
+package touhou.touhou.players;
 
 import bases.GameObject;
 import bases.Utils;
+import bases.Vector2D;
+import bases.physics.BoxColider;
 
 import java.awt.event.KeyEvent;
 
@@ -20,17 +22,19 @@ public class Player extends GameObject {
 
     int coolDownCount;
 
+    public BoxColider boxColider;
+
     final int SPEED = 5;
     final int coolDownTime = 30;
     final int LEFT = 0;
-    final int RIGHT = 360;
+    final int RIGHT = 384;
     final int TOP = 0;
-    final int BOTTOM = 518;
+    final int BOTTOM = 552;
 
     public Player() {
-        x = 182;
-        y = 510;
+        position.set(182, 500);
         image = Utils.loadImage("assets/images/players/straight/0.png");
+        boxColider = new BoxColider(32,48);
     }
 
     public void keyPressed(KeyEvent e) {
@@ -74,29 +78,29 @@ public class Player extends GameObject {
     public void run() {
         move();
         shoot();
+        boxColider.postition.set(this.position);
     }
 
-    private void move() {
-        int vx = 0;
-        int vy = 0;
+    Vector2D velocity = new Vector2D(0, 0);
 
+    private void move() {
+        velocity.set(0, 0);
         if (rightPressed) {
-            vx += SPEED;
+            velocity.x += SPEED;
         }
         if (leftPressed) {
-            vx -= SPEED;
+            velocity.x -= SPEED;
         }
         if (upPressed) {
-            vy -= SPEED;
+            velocity.y -= SPEED;
         }
         if (downPressed) {
-            vy += SPEED;
+            velocity.y += SPEED;
         }
 
-        x += vx;
-        y += vy;
-        x = (int) clamp(x, LEFT, RIGHT);
-        y = (int) clamp(y, TOP, BOTTOM);
+        position.addUp(velocity);
+        position.x = (int) clamp(position.x, LEFT, RIGHT);
+        position.y = (int) clamp(position.y, TOP, BOTTOM);
     }
 
     private float clamp(float value, float min, float max) {
@@ -122,10 +126,14 @@ public class Player extends GameObject {
         if (xPressed) {
             xPressed = false;
             PlayerSpell newSpell = new PlayerSpell();
-            newSpell.x = x;
-            newSpell.y = y;
+            //newSpell.position.set(this.position);
+            newSpell.position.set(position.x, position.y - image.getWidth()/2);
             GameObject.add(newSpell);
             spellDisabled = true;
         }
+    }
+
+    public void getHit () {
+        isActive = false;
     }
 }

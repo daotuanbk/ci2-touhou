@@ -21,6 +21,9 @@ public class Vector2D {
         this.x = a;
         this.y = b;
     }
+    public void set(Vector2D v) {
+        this.set(v.x, v.y);
+    }
 
     public Vector2D clone() {
         return new Vector2D(this.x, this.y);
@@ -32,42 +35,45 @@ public class Vector2D {
     }
 
     public void addUp(Vector2D v) {
-        this.x += v.x;
-        this.y += v.y;
+        this.addUp(v.x, v.y);
     }
 
     public Vector2D add(Vector2D v) {
-        return new Vector2D(this.x + v.x, this.y + v.y);
+        return this.add(v.x, v.y);
     }
 
-    public Vector2D add(float a, float b) {
-        return new Vector2D(this.x + a, this.y + b);
+    public Vector2D add(float x, float y) {
+        return new Vector2D(this.x + x, this.y + y);
     }
 
-    public void subtractBy(float a, float b) {
-        this.x -= a;
-        this.y -= b;
+    public void subtractBy(float x, float y) {
+        this.x -= x;
+        this.y -= y;
     }
 
     public void subtractBy(Vector2D v) {
-        this.x -= v.x;
-        this.y -= v.y;
+        this.subtractBy(v.x, v.y);
     }
 
     public Vector2D subtract(Vector2D v) {
-        return new Vector2D(this.x - v.x, this.y - v.y);
+        return this.subtract(v.x, v.y);
     }
 
-    public Vector2D subtract(float a, float b) {
-        return new Vector2D(this.x - a, this.y - b);
+    public Vector2D subtract(float x, float y) {
+        return new Vector2D(this.x - x, this.y - y);
     }
 
-    public Vector2D multiply(float a) {
-        return new Vector2D(this.x * a, this.y * a);
+    public Vector2D multiply(float x) {
+        return new Vector2D(this.x * x, this.y * x);
     }
 
-    public double length() {
+    public float length() {
         return (float) Math.sqrt(x * x + y * y);
+    }
+
+    public Vector2D normalize () {
+        float length = length();
+        return new Vector2D(this.x/length, this.y/length);
     }
 
     @Override
