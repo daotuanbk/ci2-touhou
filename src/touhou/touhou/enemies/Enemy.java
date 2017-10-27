@@ -2,55 +2,52 @@ package touhou.touhou.enemies;
 
 import bases.GameObject;
 import bases.Utils;
-import bases.physics.BoxColider;
+import bases.physics.BoxCollider;
+import bases.physics.PhysicsBody;
+
+import javax.swing.*;
 
 
-public class Enemy extends GameObject {
-    boolean spellDisabled;
+public class Enemy extends GameObject implements PhysicsBody {
 
-    public BoxColider boxColider;
 
-    int coolDownCount;
+    public BoxCollider boxColider;
+    PlayerDamage playerDamage;
+    EnemyCastSpell castSpell = new EnemyCastSpell();
     int SPEED = 3;
-
-    final int coolDownTime = 30;
+    int x = 1, y = 1;
     final int LEFT = 0;
     final int RIGHT = 352;
 
     public Enemy() {
-        position.set(20,20);
-        boxColider = new BoxColider(30, 30);
+        //position.set(20,20);
+        boxColider = new BoxCollider(30, 30);
         image = Utils.loadImage("assets/images/enemies/level0/blue/0.png");
+        this.playerDamage = new PlayerDamage();
     }
 
     public void run() {
-        position.addUp(0, 2);
-        shoot();
-        boxColider.postition.set(this.position);
-    }
-
-    public void shoot() {
-        if (spellDisabled) {
-            coolDownCount++;
-            if (coolDownCount >= coolDownTime) {
-                spellDisabled = false;
-                coolDownCount = 0;
-            }
-            return;
-        } else {
-            EnemySpell newSpell = new EnemySpell();
-            newSpell.position.set(position.x, position.y + image.getWidth()/2);
-            GameObject.add(newSpell);
-            spellDisabled = true;
+        if (position.x >= RIGHT) {
+            x = -2;
+            y = -2;
         }
+        if (position.y <= LEFT) {
+            x = 2;
+            y = 2;
+        }
+        position.addUp(x, y);
+        castSpell.shoot(this);
+        boxColider.postition.set(this.position);
+        this.playerDamage.run(this);
     }
 
     public void getHit() {
         isActive = false;
     }
 
- /*   public Rectangle eBounds() {
-        return new Rectangle(x, y, image.getWidth(), image.getHeight());
-    }*/
+    @Override
+    public BoxCollider getBoxCollider() {
+        return boxColider;
+    }
 }
 

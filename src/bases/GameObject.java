@@ -1,8 +1,10 @@
 package bases;
 
-import bases.physics.BoxColider;
+import bases.physics.BoxCollider;
+import bases.physics.PhysicsBody;
 import touhou.touhou.enemies.Enemy;
 import touhou.touhou.players.Player;
+import touhou.touhou.players.PlayerSpell;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -56,27 +58,42 @@ public class GameObject {
         }
     }
 
-    public static Enemy collideWith(BoxColider boxColider) {
+    // Tìm trong tất cả các GameObject nếu gặp 1 Object thỏa mãn 2 điều kiện
+    // 1. Nếu GameObject này là PlayerSpell
+    // 2. isActive == false
+    // return Object này
+    // Nếu không tìm thấy, tự khởi tạo 1 PlayerSpell mới => return
+    public static <T extends GameObject> T recycle(Class<T> cls) {
         for (GameObject gameObject : gameObjects) {
-            if (gameObject.isActive && gameObject instanceof Enemy) {
-                Enemy enemy = (Enemy)gameObject;
-                if (enemy.boxColider.collideWith(boxColider)) {
-                    return enemy;
-                }
+            if (gameObject.getClass().equals(cls) && gameObject.isActive == false) {
+                gameObject.isActive = true;
+                return (T) gameObject;
+            }
+
+        }
+        T t = null; // = new
+        try {
+            T newGameObject = cls.newInstance();
+            add(newGameObject);
+            return newGameObject;
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    public static <T extends PhysicsBody> T collideWith(BoxCollider boxCollider, Class<T> cls) {
+        for (GameObject gameObject : gameObjects) {
+            if (!gameObject.isActive) continue;
+            if (!(gameObject instanceof PhysicsBody)) continue;
+            if (!(gameObject.getClass().equals(cls))) continue;
+            BoxCollider otherBoxCollider = ((PhysicsBody) gameObject).getBoxCollider();
+            if (otherBoxCollider.collideWith(boxCollider)) {
+                return (T) gameObject;
             }
         }
         return null;
     }
 
-    public static Player collidePlayer(BoxColider boxColider) {
-        for (GameObject gameObject : gameObjects) {
-            if (gameObject.isActive && gameObject instanceof Player) {
-                Player player = (Player)gameObject;
-                if (player.boxColider.collideWith(boxColider)) {
-                    return player;
-                }
-            }
-        }
-        return null;
-    }
 }

@@ -1,3 +1,5 @@
+import touhou.touhou.inputs.InputManager;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -26,16 +28,17 @@ public class GameWindow extends JFrame {
         this.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
+
             }
 
             @Override
             public void keyPressed(KeyEvent e) {
-                canvas.keyPressed(e);
+                InputManager.instance.keyPressed(e);
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
-                canvas.keyReleased(e);
+                InputManager.instance.keyReleased(e);
             }
         });
 
@@ -44,7 +47,7 @@ public class GameWindow extends JFrame {
         lastTimeUpdate = System.nanoTime();
     }
 
-    public void gameLoop () {
+    public void gameLoop() {
         while (true) {
             long currentTime = System.nanoTime();
 

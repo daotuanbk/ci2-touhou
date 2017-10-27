@@ -54,16 +54,6 @@ public class GameCanvas extends JPanel {
         repaint();
     }
 
-    public void keyPressed(KeyEvent e) {
-        player.keyPressed(e);
-
-    }
-
-    public void keyReleased(KeyEvent e) {
-        player.keyReleased(e);
-
-
-    }
 
 //    public void checkDie() {
 //        for (int i = 0; i < spells.size(); i++) {
